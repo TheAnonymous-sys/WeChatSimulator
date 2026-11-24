@@ -1,8 +1,8 @@
 (function(){
   "use strict";
-  var STORAGE_KEY="wechat_simulator_conversations_v2";
+  var STORAGE_KEY="wechat_simulator_conversations_v3";
   var defaults={
-    settings:{time:"14:56",battery:82,network:"5G",displayScale:"large",showWindows:true,activeTab:"chats"},
+    settings:{time:"14:56",battery:82,network:"5G",displayScale:"standard",showWindows:true,activeTab:"chats"},
     conversations:[
       {id:"c1",name:"林然",message:"晚点回来，记得先吃饭。",time:"10:08",unread:2,pinned:true,muted:false,draft:"",avatar:""},
       {id:"c2",name:"木木",message:"[图片]",time:"09:42",unread:0,pinned:false,muted:false,draft:"",avatar:""},
