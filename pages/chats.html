@@ -3,18 +3,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>微信会话列表模拟器</title>
+  <title>微信模拟器</title>
   <link rel="icon" href="../favicon.ico">
   <link rel="stylesheet" href="../static/app/css/chats.css">
 </head>
 <body>
   <header class="workspace-header">
     <div>
-      <h1>微信会话列表模拟器</h1>
-      <p>按安卓微信界面制作，支持标准字号与大字体显示。</p>
+      <h1>微信模拟器</h1>
+      <p>按安卓微信的页面层级、样式与交互制作。</p>
     </div>
     <div class="header-actions">
-      <a class="button ghost" href="../index.html">聊天页面</a>
+      <a class="button ghost" href="../index.html?legacy=1">旧版聊天编辑器</a>
       <button class="button primary" id="saveImage" type="button">生成并保存图片</button>
     </div>
   </header>
@@ -69,7 +69,7 @@
           <div class="wechat-header" id="screenHeader">
             <button class="header-icon more-dots" id="headerLeft" type="button" aria-label="更多">••</button>
             <strong id="headerTitle">微信</strong>
-            <div class="header-right"><button class="header-icon search-button" type="button" aria-label="搜索"></button><button class="header-icon plus-button" type="button" aria-label="添加">＋</button></div>
+            <div class="header-right"><button class="header-icon search-button" id="openSearch" type="button" aria-label="搜索"></button><button class="header-icon plus-button" id="openPlus" type="button" aria-label="添加">＋</button></div>
           </div>
 
           <div class="wechat-content" id="wechatContent">
@@ -80,30 +80,61 @@
 
             <section class="app-screen contacts-screen" data-screen="contacts">
               <div class="contact-list special-contacts">
-                <div class="contact-row"><span class="contact-icon orange">♙+</span><b>新的朋友</b></div>
-                <div class="contact-row"><span class="contact-icon orange">♙</span><b>仅聊天的朋友</b></div>
-                <div class="contact-row"><span class="contact-icon green">♙</span><b>群聊</b></div>
-                <div class="contact-row"><span class="contact-icon blue">◆</span><b>标签</b></div>
-                <div class="contact-row"><span class="contact-icon blue">◫</span><b>公众号</b></div>
-                <div class="contact-row"><span class="contact-icon cyan">◆</span><b>服务号</b></div>
+                <div class="contact-row tappable" data-placeholder="新的朋友"><span class="contact-icon orange">♙+</span><b>新的朋友</b></div>
+                <div class="contact-row tappable" data-placeholder="仅聊天的朋友"><span class="contact-icon orange">♙</span><b>仅聊天的朋友</b></div>
+                <div class="contact-row tappable" data-placeholder="群聊"><span class="contact-icon green">♙</span><b>群聊</b></div>
+                <div class="contact-row tappable" data-placeholder="标签"><span class="contact-icon blue">◆</span><b>标签</b></div>
+                <div class="contact-row tappable" data-placeholder="公众号"><span class="contact-icon blue">◫</span><b>公众号</b></div>
+                <div class="contact-row tappable" data-placeholder="服务号"><span class="contact-icon cyan">◆</span><b>服务号</b></div>
               </div>
               <div class="contact-section-title">我的企业及企业联系人</div>
-              <div class="contact-list"><div class="contact-row"><span class="contact-icon blue">◌</span><b>企业微信联系人</b></div><div class="contact-row"><span class="contact-icon cyan">⌂</span><b>示例大学</b></div></div>
+              <div class="contact-list"><div class="contact-row tappable" data-placeholder="企业微信联系人"><span class="contact-icon blue">◌</span><b>企业微信联系人</b></div><div class="contact-row tappable" data-placeholder="示例大学"><span class="contact-icon cyan">⌂</span><b>示例大学</b></div></div>
               <div class="contact-section-title">星标朋友</div>
-              <div class="contact-list"><div class="contact-row"><span class="contact-avatar default-avatar">林</span><b>林然</b></div></div>
+              <div class="contact-list"><div class="contact-row tappable" data-contact="林然"><span class="contact-avatar default-avatar">林</span><b>林然</b></div></div>
               <div class="alphabet-rail">↑<br>☆<br>A<br>B<br>C<br>D<br>E<br>F<br>G<br>H<br>I<br>J<br>K<br>L<br>M<br>N<br>O<br>P<br>Q<br>R<br>S<br>T<br>U<br>V<br>W<br>X<br>Y<br>Z<br>#</div>
             </section>
 
             <section class="app-screen discover-screen" data-screen="discover">
-              <div class="settings-group"><div class="setting-row"><span class="line-icon moments">◉</span><b>朋友圈</b><span class="moment-thumb"></span><i>›</i></div></div>
-              <div class="settings-group"><div class="setting-row"><span class="line-icon look">✧</span><b>看一看</b><i>›</i></div></div>
+              <div class="settings-group"><div class="setting-row tappable" data-route-link="moments"><span class="line-icon moments">◉</span><b>朋友圈</b><span class="moment-thumb"></span><i>›</i></div></div>
+              <div class="settings-group"><div class="setting-row tappable" data-placeholder="看一看"><span class="line-icon look">✧</span><b>看一看</b><i>›</i></div></div>
             </section>
 
             <section class="app-screen me-screen" data-screen="me">
-              <div class="profile-card"><span class="profile-avatar default-avatar">林</span><div class="profile-copy"><strong>林然</strong><span>微信号：wxid_demo</span><div><em>＋ 状态</em><em>2个朋友 <i></i></em></div></div><span class="qr-mark">▦</span><i class="profile-arrow">›</i></div>
-              <div class="settings-group"><div class="setting-row"><span class="line-icon service">◉</span><b>服务</b><i>›</i></div></div>
-              <div class="settings-group"><div class="setting-row"><span class="line-icon collection">◇</span><b>收藏</b><i>›</i></div><div class="setting-row"><span class="line-icon album">▧</span><b>朋友圈</b><i>›</i></div><div class="setting-row"><span class="line-icon works">▣</span><b>作品</b><i>›</i></div><div class="setting-row"><span class="line-icon cards">⌑</span><b>小店与卡包</b><small>示例消息… <u></u></small><i>›</i></div><div class="setting-row"><span class="line-icon emoji">☺</span><b>表情</b><i>›</i></div></div>
-              <div class="settings-group"><div class="setting-row"><span class="line-icon settings">⚙</span><b>设置</b><i>›</i></div></div>
+              <div class="profile-card tappable" data-route-link="my-profile"><span class="profile-avatar default-avatar">林</span><div class="profile-copy"><strong>林然</strong><span>微信号：wxid_demo</span><div><em>＋ 状态</em><em>2个朋友 <i></i></em></div></div><span class="qr-mark">▦</span><i class="profile-arrow">›</i></div>
+              <div class="settings-group"><div class="setting-row tappable" data-placeholder="服务"><span class="line-icon service">◉</span><b>服务</b><i>›</i></div></div>
+              <div class="settings-group"><div class="setting-row tappable" data-placeholder="收藏"><span class="line-icon collection">◇</span><b>收藏</b><i>›</i></div><div class="setting-row tappable" data-route-link="moments"><span class="line-icon album">▧</span><b>朋友圈</b><i>›</i></div><div class="setting-row tappable" data-placeholder="作品"><span class="line-icon works">▣</span><b>作品</b><i>›</i></div><div class="setting-row tappable" data-placeholder="小店与卡包"><span class="line-icon cards">⌑</span><b>小店与卡包</b><small>示例消息… <u></u></small><i>›</i></div><div class="setting-row tappable" data-placeholder="表情"><span class="line-icon emoji">☺</span><b>表情</b><i>›</i></div></div>
+              <div class="settings-group"><div class="setting-row tappable" data-route-link="settings"><span class="line-icon settings">⚙</span><b>设置</b><i>›</i></div></div>
+            </section>
+
+            <section class="secondary-screen chat-screen" data-route="chat">
+              <div class="chat-thread" id="chatThread"></div>
+              <div class="chat-input-bar"><button type="button" aria-label="语音">◉</button><div class="fake-input"></div><button type="button" aria-label="表情">☺</button><button type="button" aria-label="更多">＋</button></div>
+            </section>
+
+            <section class="secondary-screen contact-profile-screen" data-route="contact-profile">
+              <div class="contact-profile-card"><span class="contact-profile-avatar default-avatar" id="contactProfileAvatar">林</span><div><strong id="contactProfileName">林然</strong><span>微信号：wxid_demo</span><small>地区：中国大陆</small></div><i>›</i></div>
+              <div class="profile-lines"><div class="profile-line"><b>朋友圈</b><span class="photo-strip"><i></i><i></i><i></i></span><em>›</em></div><div class="profile-line"><b>更多信息</b><em>›</em></div></div>
+              <div class="profile-actions"><button id="sendToContact" type="button">发消息</button><button type="button">音视频通话</button></div>
+            </section>
+
+            <section class="secondary-screen moments-screen" data-route="moments">
+              <div class="moments-cover"><span class="moments-user">林然</span><span class="moments-avatar default-avatar">林</span></div>
+              <div class="moment-post"><span class="post-avatar default-avatar">木</span><div><strong>木木</strong><p>今天的天气很好，适合出去走走。</p><div class="post-photo"></div><small>10分钟前</small><button type="button">··</button></div></div>
+              <div class="moment-post"><span class="post-avatar default-avatar">课</span><div><strong>课题讨论群</strong><p>新的资料已经整理完毕。</p><small>昨天</small><button type="button">··</button></div></div>
+            </section>
+
+            <section class="secondary-screen settings-screen" data-route="settings">
+              <div class="settings-group"><div class="setting-row tappable" data-placeholder="账号与安全"><b>账号与安全</b><i>›</i></div></div>
+              <div class="settings-group"><div class="setting-row tappable" data-placeholder="消息通知"><b>消息通知</b><i>›</i></div><div class="setting-row tappable" data-placeholder="通用"><b>通用</b><i>›</i></div><div class="setting-row tappable" data-placeholder="朋友权限"><b>朋友权限</b><i>›</i></div><div class="setting-row tappable" data-placeholder="个人信息与权限"><b>个人信息与权限</b><i>›</i></div></div>
+              <div class="settings-group"><div class="setting-row tappable" data-placeholder="关于微信"><b>关于微信</b><i>›</i></div><div class="setting-row tappable" data-placeholder="帮助与反馈"><b>帮助与反馈</b><i>›</i></div></div>
+            </section>
+
+            <section class="secondary-screen my-profile-screen" data-route="my-profile">
+              <div class="settings-group profile-detail-group"><div class="setting-row"><span class="profile-avatar default-avatar">林</span><b>头像</b><i>›</i></div><div class="setting-row"><b>名字</b><small>林然</small><i>›</i></div><div class="setting-row"><b>拍一拍</b><i>›</i></div><div class="setting-row"><b>微信号</b><small>wxid_demo</small><i>›</i></div><div class="setting-row"><b>我的二维码</b><span class="qr-mark">▦</span><i>›</i></div><div class="setting-row"><b>更多</b><i>›</i></div></div>
+            </section>
+
+            <section class="secondary-screen placeholder-screen" data-route="placeholder">
+              <div class="empty-state"><span>◌</span><p id="placeholderCopy">该页面将在后续补全</p></div>
             </section>
           </div>
 
@@ -114,6 +145,16 @@
             <button class="tab" data-tab="me" type="button"><span class="tab-icon me-icon"></span><span>我</span></button>
           </nav>
           <div class="home-indicator"></div>
+
+          <div class="search-overlay" id="searchOverlay" aria-hidden="true">
+            <div class="search-head"><div class="search-field"><span></span><input id="searchInput" type="search" placeholder="搜索"></div><button id="closeSearch" type="button">取消</button></div>
+            <div class="search-scope"><p>搜索指定内容</p><div><button type="button">朋友圈</button><button type="button">文章</button><button type="button">公众号</button><button type="button">小程序</button><button type="button">音乐</button><button type="button">表情</button><button type="button">服务</button></div></div>
+            <div class="search-results" id="searchResults"></div>
+          </div>
+
+          <div class="overlay-shade" id="overlayShade"></div>
+          <div class="plus-menu" id="plusMenu"><button type="button" data-placeholder="发起群聊"><span>◫</span>发起群聊</button><button type="button" data-placeholder="添加朋友"><span>＋</span>添加朋友</button><button type="button" data-placeholder="扫一扫"><span>⌗</span>扫一扫</button><button type="button" data-placeholder="收付款"><span>¥</span>收付款</button></div>
+          <div class="context-menu" id="contextMenu"><button type="button" data-context="pin">置顶该聊天</button><button type="button" data-context="unread">标为未读</button><button type="button" data-context="mute">消息免打扰</button></div>
         </div>
       </div>
     </section>
