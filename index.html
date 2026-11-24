@@ -26,6 +26,7 @@
 		<div class="container-fluid page-content">
 			<div id="pageHeader">微信对话生成器</div>
 			<div class="page-actions">
+				<a href="pages/chats.html" class="btn btn-success" style="margin-right: 8px;">会话列表模拟器</a>
 				<button @click="save" class="btn btn-warning btn-save-image">生成并保存图片</button>
 				<span class="page-actions-tip">生成后会弹出图片预览，长按或右键即可保存到本地</span>
 			</div>
@@ -619,6 +620,7 @@
 	</div>
 	<a id="lightBoxToggle" href="javascript:;" data-toggle="lightbox" data-type="image" style="display:none;">preview</a>
 	<script type="text/javascript" src="static/app/js/call-extension.js"></script>
+	<script type="text/javascript" src="static/app/js/chat-bridge.js"></script>
 </body>
 
 </html>
