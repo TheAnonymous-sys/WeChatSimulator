@@ -5,7 +5,7 @@
 上游仓库：https://github.com/zixiwangluo/wxdh
 
 当前仓库地址：  
-https://github.com/JX-Lab/WeChatSimulator
+https://github.com/TheAnonymous-sys/WeChatSimulator
 
 这是一个纯静态网页项目，核心入口是根目录 [index.html]，可以直接部署到 GitHub Pages、静态服务器或虚拟主机。
 
@@ -30,7 +30,7 @@ https://github.com/JX-Lab/WeChatSimulator
 5. 目录选择 `/ (root)`
 
 启用后，这个仓库通常会生成类似下面的地址：  
-https://jx-lab.github.io/WeChatSimulator/
+https://theanonymous-sys.github.io/WeChatSimulator/
 
 原版演示地址：  
 https://zixiwangluo.github.io/wxdh/
