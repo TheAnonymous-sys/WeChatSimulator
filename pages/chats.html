@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>微信会话列表模拟器</title>
+  <link rel="icon" href="../favicon.ico">
+  <link rel="stylesheet" href="../static/app/css/chats.css">
+</head>
+<body>
+  <header class="workspace-header">
+    <div>
+      <h1>微信会话列表模拟器</h1>
+      <p>编辑内容，实时生成接近微信样式的会话列表。</p>
+    </div>
+    <div class="header-actions">
+      <a class="button ghost" href="../index.html">聊天页面</a>
+      <button class="button primary" id="saveImage" type="button">生成并保存图片</button>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <section class="editor-panel" aria-label="会话编辑器">
+      <div class="panel-title">
+        <h2>页面设置</h2>
+        <button class="text-button" id="resetAll" type="button">恢复示例</button>
+      </div>
+
+      <div class="form-grid page-settings">
+        <label>手机时间<input id="phoneTime" type="time" value="10:08"></label>
+        <label>电量<input id="battery" type="number" min="0" max="100" value="82"></label>
+        <label>网络
+          <select id="network">
+            <option>5G</option><option>4G</option><option>Wi-Fi</option>
+          </select>
+        </label>
+        <label class="check-label"><input id="showSearch" type="checkbox" checked>显示搜索栏</label>
+      </div>
+
+      <div class="panel-title conversations-heading">
+        <h2>会话内容</h2>
+        <button class="button small" id="addConversation" type="button">＋ 添加会话</button>
+      </div>
+      <div id="conversationEditors" class="conversation-editors"></div>
+    </section>
+
+    <section class="preview-panel" aria-label="手机预览">
+      <div class="preview-tools">
+        <span>实时预览</span>
+        <span class="save-tip" id="saveTip">数据会自动保存在当前浏览器</span>
+      </div>
+      <div class="phone-shell">
+        <div class="phone" id="phonePreview">
+          <div class="status-bar">
+            <span class="status-time" id="previewTime">10:08</span>
+            <div class="status-icons">
+              <span class="signal"><i></i><i></i><i></i><i></i></span>
+              <span id="previewNetwork">5G</span>
+              <span class="battery-icon"><span id="batteryFill"></span></span>
+            </div>
+          </div>
+
+          <div class="wechat-header">
+            <button class="header-icon" type="button" aria-label="添加">＋</button>
+            <strong>微信</strong>
+            <button class="header-icon" type="button" aria-label="更多">⊕</button>
+          </div>
+
+          <div class="wechat-content">
+            <div class="search-row" id="searchRow">
+              <div class="search-box"><span class="search-icon"></span><span>搜索</span></div>
+            </div>
+            <div class="conversation-list" id="conversationList"></div>
+          </div>
+
+          <nav class="tab-bar">
+            <button class="tab active" type="button"><span class="tab-icon chat-icon"></span><span>微信</span><em id="totalUnread"></em></button>
+            <button class="tab" type="button"><span class="tab-icon contacts-icon"></span><span>通讯录</span></button>
+            <button class="tab" type="button"><span class="tab-icon discover-icon"></span><span>发现</span></button>
+            <button class="tab" type="button"><span class="tab-icon me-icon"></span><span>我</span></button>
+          </nav>
+          <div class="home-indicator"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <template id="conversationEditorTemplate">
+    <article class="conversation-editor">
+      <div class="editor-card-head">
+        <button class="collapse-button" type="button"><span class="avatar-mini"></span><strong class="card-title">新会话</strong><span class="chevron">⌄</span></button>
+        <div class="card-actions">
+          <button class="move-up icon-button" type="button" title="上移">↑</button>
+          <button class="move-down icon-button" type="button" title="下移">↓</button>
+          <button class="delete-conversation icon-button danger" type="button" title="删除">×</button>
+        </div>
+      </div>
+      <div class="editor-card-body">
+        <div class="avatar-upload-wrap">
+          <label class="avatar-upload">
+            <img alt="会话头像">
+            <span>更换头像</span>
+            <input class="field-avatar" type="file" accept="image/*">
+          </label>
+          <button class="clear-avatar text-button" type="button">使用默认头像</button>
+        </div>
+        <div class="form-grid conversation-fields">
+          <label>昵称<input class="field-name" type="text" maxlength="24"></label>
+          <label>时间<input class="field-time" type="text" maxlength="12" placeholder="10:08 / 昨天"></label>
+          <label class="wide">消息摘要<input class="field-message" type="text" maxlength="50"></label>
+          <label>未读数<input class="field-unread" type="number" min="0" max="99"></label>
+          <label>草稿文字<input class="field-draft" type="text" maxlength="20" placeholder="留空则不显示"></label>
+          <label class="check-label"><input class="field-pinned" type="checkbox">置顶聊天</label>
+          <label class="check-label"><input class="field-muted" type="checkbox">消息免打扰</label>
+        </div>
+      </div>
+    </article>
+  </template>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="../static/app/js/chats.js"></script>
+</body>
+</html>
