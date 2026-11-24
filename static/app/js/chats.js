@@ -1,8 +1,8 @@
 (function(){
   "use strict";
-  var STORAGE_KEY="wechat_simulator_conversations_v1";
+  var STORAGE_KEY="wechat_simulator_conversations_v2";
   var defaults={
-    settings:{time:"10:08",battery:82,network:"5G",showSearch:true},
+    settings:{time:"14:56",battery:82,network:"5G",displayScale:"large",showWindows:true,activeTab:"chats"},
     conversations:[
       {id:"c1",name:"林然",message:"晚点回来，记得先吃饭。",time:"10:08",unread:2,pinned:true,muted:false,draft:"",avatar:""},
       {id:"c2",name:"木木",message:"[图片]",time:"09:42",unread:0,pinned:false,muted:false,draft:"",avatar:""},
@@ -17,7 +17,7 @@
 
   function clone(value){return JSON.parse(JSON.stringify(value));}
   function loadState(){
-    try{var saved=JSON.parse(localStorage.getItem(STORAGE_KEY));if(saved&&saved.settings&&Array.isArray(saved.conversations))return saved;}catch(e){}
+    try{var saved=JSON.parse(localStorage.getItem(STORAGE_KEY));if(saved&&saved.settings&&Array.isArray(saved.conversations)){saved.settings=Object.assign({},defaults.settings,saved.settings);return saved;}}catch(e){}
     return clone(defaults);
   }
   function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}
@@ -35,22 +35,42 @@
     document.getElementById("phoneTime").value=state.settings.time;
     document.getElementById("battery").value=state.settings.battery;
     document.getElementById("network").value=state.settings.network;
-    document.getElementById("showSearch").checked=state.settings.showSearch;
+    document.getElementById("displayScale").value=state.settings.displayScale;
+    document.getElementById("showWindows").checked=state.settings.showWindows;
     document.getElementById("previewTime").textContent=state.settings.time||"10:08";
     document.getElementById("previewNetwork").textContent=state.settings.network;
-    document.getElementById("batteryFill").style.width=Math.max(0,Math.min(100,Number(state.settings.battery)||0))+"%";
-    document.getElementById("searchRow").style.display=state.settings.showSearch?"block":"none";
+    document.getElementById("batteryText").textContent=Math.max(0,Math.min(100,Number(state.settings.battery)||0))+"%";
+    document.getElementById("desktopLogin").style.display=state.settings.showWindows?"flex":"none";
+    document.getElementById("phonePreview").classList.toggle("standard",state.settings.displayScale==="standard");
+    setActiveTab(state.settings.activeTab||"chats",false);
   }
   function renderPreview(){
     var total=0;
     list.innerHTML=state.conversations.map(function(item,index){
-      var unread=Math.max(0,Math.min(99,Number(item.unread)||0));total+=unread;
+      var unread=Math.max(0,Math.min(99,Number(item.unread)||0));if(!item.muted)total+=unread;
       var avatar=item.avatar?'<img class="conversation-avatar" src="'+item.avatar+'" alt="">':defaultAvatar(item.name,index);
       var badge=unread?(item.muted?'<span class="unread-badge unread-dot"></span>':'<span class="unread-badge">'+(unread>99?"99+":unread)+'</span>'):"";
       var draft=item.draft?'<span class="draft">['+escapeHtml(item.draft)+'] </span>':"";
       return '<div class="conversation-row '+(item.pinned?"pinned":"")+'" data-index="'+index+'"><div class="conversation-avatar-wrap">'+avatar+badge+'</div><div class="conversation-main"><div class="conversation-top"><span class="conversation-name">'+escapeHtml(item.name||"未命名会话")+'</span><span class="conversation-time">'+escapeHtml(item.time)+'</span></div><div class="conversation-bottom"><span class="conversation-message">'+draft+escapeHtml(item.message)+'</span>'+(item.muted?'<span class="mute-icon"></span>':"")+'</div></div></div>';
     }).join("");
     document.getElementById("totalUnread").textContent=total?String(Math.min(total,99))+(total>99?"+":""):"";
+    updateHeader(total);
+  }
+  function updateHeader(total){
+    var tab=state.settings.activeTab||"chats";var titles={chats:"微信",contacts:"通讯录",discover:"发现",me:""};
+    document.getElementById("headerTitle").textContent=tab==="chats"&&total?"微信("+total+")":titles[tab];
+    document.getElementById("headerLeft").style.visibility=tab==="chats"?"visible":"hidden";
+    document.getElementById("phonePreview").classList.toggle("me-active",tab==="me");
+  }
+  function setActiveTab(tab,shouldSave){
+    if(!document.querySelector('[data-screen="'+tab+'"]'))tab="chats";
+    state.settings.activeTab=tab;
+    document.querySelectorAll(".app-screen").forEach(function(screen){screen.classList.toggle("active",screen.dataset.screen===tab);});
+    document.querySelectorAll(".tab").forEach(function(button){button.classList.toggle("active",button.dataset.tab===tab);});
+    document.getElementById("wechatContent").scrollTop=0;
+    var total=state.conversations.reduce(function(sum,item){return sum+(item.muted?0:(Number(item.unread)||0));},0);
+    updateHeader(total);
+    if(shouldSave!==false)saveState();
   }
   function renderEditors(){
     editors.innerHTML="";
@@ -85,7 +105,9 @@
   document.getElementById("phoneTime").addEventListener("input",function(e){state.settings.time=e.target.value;applySettings();saveState();});
   document.getElementById("battery").addEventListener("input",function(e){state.settings.battery=Math.max(0,Math.min(100,Number(e.target.value)||0));applySettings();saveState();});
   document.getElementById("network").addEventListener("change",function(e){state.settings.network=e.target.value;applySettings();saveState();});
-  document.getElementById("showSearch").addEventListener("change",function(e){state.settings.showSearch=e.target.checked;applySettings();saveState();});
+  document.getElementById("displayScale").addEventListener("change",function(e){state.settings.displayScale=e.target.value;applySettings();saveState();});
+  document.getElementById("showWindows").addEventListener("change",function(e){state.settings.showWindows=e.target.checked;applySettings();saveState();});
+  document.getElementById("tabBar").addEventListener("click",function(e){var tab=e.target.closest(".tab");if(tab)setActiveTab(tab.dataset.tab);});
   document.getElementById("addConversation").addEventListener("click",function(){state.conversations.push({id:uid(),name:"新会话",message:"请输入消息摘要",time:state.settings.time,unread:0,pinned:false,muted:false,draft:"",avatar:""});render();setTimeout(function(){editors.lastElementChild.scrollIntoView({behavior:"smooth",block:"center"});},0);});
   document.getElementById("resetAll").addEventListener("click",function(){if(confirm("恢复示例内容？当前编辑的数据会被覆盖。")){state=clone(defaults);render();}});
   list.addEventListener("click",function(e){var row=e.target.closest(".conversation-row");if(!row)return;var item=state.conversations[Number(row.dataset.index)];localStorage.setItem("wechat_simulator_selected_conversation",JSON.stringify(item));window.location.href="../index.html?title="+encodeURIComponent(item.name||"");});
@@ -93,7 +115,7 @@
     var phone=document.getElementById("phonePreview");var tip=document.getElementById("saveTip");
     if(typeof html2canvas!=="function"){tip.textContent="截图组件加载失败，请联网刷新后重试";return;}
     tip.textContent="正在生成图片…";phone.classList.add("exporting");
-    html2canvas(phone,{scale:3,useCORS:true,backgroundColor:"#ededed"}).then(function(canvas){var link=document.createElement("a");link.download="微信会话列表.png";link.href=canvas.toDataURL("image/png");link.click();tip.textContent="图片已生成";}).catch(function(){tip.textContent="生成失败，请重试";}).finally(function(){phone.classList.remove("exporting");});
+    html2canvas(phone,{scale:3,useCORS:true,backgroundColor:"#ededed"}).then(function(canvas){var link=document.createElement("a");var names={chats:"微信",contacts:"通讯录",discover:"发现",me:"我"};link.download=names[state.settings.activeTab||"chats"]+"页面.png";link.href=canvas.toDataURL("image/png");link.click();tip.textContent="图片已生成";}).catch(function(){tip.textContent="生成失败，请重试";}).finally(function(){phone.classList.remove("exporting");});
   });
   render();
 })();
