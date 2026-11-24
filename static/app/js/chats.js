@@ -5,7 +5,7 @@
     settings:{time:"14:56",battery:82,network:"5G",displayScale:"standard",showWindows:true,activeTab:"chats"},
     conversations:[
       {id:"c1",name:"林然",message:"晚点回来，记得先吃饭。",time:"10:08",unread:2,pinned:true,muted:false,draft:"",avatar:""},
-      {id:"c2",name:"木木",message:"[图片]",time:"09:42",unread:0,pinned:false,muted:false,draft:"",avatar:""},
+      {id:"c2",name:"木木",message:"[图片]",time:"09:42",unread:0,pinned:true,muted:false,draft:"",avatar:""},
       {id:"c3",name:"文件传输助手",message:"研究资料.zip",time:"昨天",unread:0,pinned:false,muted:true,draft:"",avatar:""},
       {id:"c4",name:"课题讨论群",message:"导师：下午把新版发群里",time:"星期一",unread:8,pinned:false,muted:true,draft:"草稿",avatar:""}
     ]
@@ -45,13 +45,13 @@
     setActiveTab(state.settings.activeTab||"chats",false);
   }
   function renderPreview(){
-    var total=0;
-    list.innerHTML=state.conversations.map(function(item,index){
+    var total=0;var ordered=state.conversations.slice().sort(function(a,b){return Number(!!b.pinned)-Number(!!a.pinned);});
+    list.innerHTML=ordered.map(function(item,index){
       var unread=Math.max(0,Math.min(99,Number(item.unread)||0));if(!item.muted)total+=unread;
       var avatar=item.avatar?'<img class="conversation-avatar" src="'+item.avatar+'" alt="">':defaultAvatar(item.name,index);
       var badge=unread?(item.muted?'<span class="unread-badge unread-dot"></span>':'<span class="unread-badge">'+(unread>99?"99+":unread)+'</span>'):"";
       var draft=item.draft?'<span class="draft">['+escapeHtml(item.draft)+'] </span>':"";
-      return '<div class="conversation-row '+(item.pinned?"pinned":"")+'" data-index="'+index+'"><div class="conversation-avatar-wrap">'+avatar+badge+'</div><div class="conversation-main"><div class="conversation-top"><span class="conversation-name">'+escapeHtml(item.name||"未命名会话")+'</span><span class="conversation-time">'+escapeHtml(item.time)+'</span></div><div class="conversation-bottom"><span class="conversation-message">'+draft+escapeHtml(item.message)+'</span>'+(item.muted?'<span class="mute-icon"></span>':"")+'</div></div></div>';
+      return '<div class="conversation-row '+(item.pinned?"pinned":"")+'" data-id="'+escapeHtml(item.id)+'"><div class="conversation-avatar-wrap">'+avatar+badge+'</div><div class="conversation-main"><div class="conversation-top"><span class="conversation-name">'+escapeHtml(item.name||"未命名会话")+'</span><span class="conversation-time">'+escapeHtml(item.time)+'</span></div><div class="conversation-bottom"><span class="conversation-message">'+draft+escapeHtml(item.message)+'</span>'+(item.muted?'<span class="mute-icon"></span>':"")+'</div></div></div>';
     }).join("");
     document.getElementById("totalUnread").textContent=total?String(Math.min(total,99))+(total>99?"+":""):"";
     updateHeader(total);
@@ -110,7 +110,7 @@
   document.getElementById("tabBar").addEventListener("click",function(e){var tab=e.target.closest(".tab");if(tab)setActiveTab(tab.dataset.tab);});
   document.getElementById("addConversation").addEventListener("click",function(){state.conversations.push({id:uid(),name:"新会话",message:"请输入消息摘要",time:state.settings.time,unread:0,pinned:false,muted:false,draft:"",avatar:""});render();setTimeout(function(){editors.lastElementChild.scrollIntoView({behavior:"smooth",block:"center"});},0);});
   document.getElementById("resetAll").addEventListener("click",function(){if(confirm("恢复示例内容？当前编辑的数据会被覆盖。")){state=clone(defaults);render();}});
-  list.addEventListener("click",function(e){var row=e.target.closest(".conversation-row");if(!row)return;var item=state.conversations[Number(row.dataset.index)];localStorage.setItem("wechat_simulator_selected_conversation",JSON.stringify(item));window.location.href="../index.html?title="+encodeURIComponent(item.name||"");});
+  list.addEventListener("click",function(e){var row=e.target.closest(".conversation-row");if(!row)return;var item=state.conversations.find(function(entry){return entry.id===row.dataset.id;});if(!item)return;localStorage.setItem("wechat_simulator_selected_conversation",JSON.stringify(item));window.location.href="../index.html?title="+encodeURIComponent(item.name||"");});
   document.getElementById("saveImage").addEventListener("click",function(){
     var phone=document.getElementById("phonePreview");var tip=document.getElementById("saveTip");
     if(typeof html2canvas!=="function"){tip.textContent="截图组件加载失败，请联网刷新后重试";return;}
