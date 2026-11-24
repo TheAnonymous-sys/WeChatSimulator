@@ -11,7 +11,7 @@
   <header class="workspace-header">
     <div>
       <h1>微信会话列表模拟器</h1>
-      <p>编辑内容，实时生成接近微信样式的会话列表。</p>
+      <p>按安卓微信界面制作，支持标准字号与大字体显示。</p>
     </div>
     <div class="header-actions">
       <a class="button ghost" href="../index.html">聊天页面</a>
@@ -34,7 +34,10 @@
             <option>5G</option><option>4G</option><option>Wi-Fi</option>
           </select>
         </label>
-        <label class="check-label"><input id="showSearch" type="checkbox" checked>显示搜索栏</label>
+        <label>显示字号
+          <select id="displayScale"><option value="large">大字体</option><option value="standard">标准</option></select>
+        </label>
+        <label class="check-label"><input id="showWindows" type="checkbox" checked>显示“已登录 Windows 电脑”</label>
       </div>
 
       <div class="panel-title conversations-heading">
@@ -51,33 +54,64 @@
       </div>
       <div class="phone-shell">
         <div class="phone" id="phonePreview">
-          <div class="status-bar">
-            <span class="status-time" id="previewTime">10:08</span>
+          <div class="status-bar android-status">
+            <div class="status-left"><span class="status-time" id="previewTime">10:08</span><i class="mini-app orange"></i><i class="mini-app pink"></i></div>
+            <div class="camera-pill"><span></span></div>
             <div class="status-icons">
-              <span class="signal"><i></i><i></i><i></i><i></i></span>
               <span id="previewNetwork">5G</span>
-              <span class="battery-icon"><span id="batteryFill"></span></span>
+              <span class="signal"><i></i><i></i><i></i><i></i></span>
+              <span class="wifi-icon"></span>
+              <b id="batteryText">82%</b>
+              <span class="charging-icon">ϟ</span>
             </div>
           </div>
 
-          <div class="wechat-header">
-            <button class="header-icon" type="button" aria-label="添加">＋</button>
-            <strong>微信</strong>
-            <button class="header-icon" type="button" aria-label="更多">⊕</button>
+          <div class="wechat-header" id="screenHeader">
+            <button class="header-icon more-dots" id="headerLeft" type="button" aria-label="更多">••</button>
+            <strong id="headerTitle">微信</strong>
+            <div class="header-right"><button class="header-icon search-button" type="button" aria-label="搜索"></button><button class="header-icon plus-button" type="button" aria-label="添加">＋</button></div>
           </div>
 
-          <div class="wechat-content">
-            <div class="search-row" id="searchRow">
-              <div class="search-box"><span class="search-icon"></span><span>搜索</span></div>
-            </div>
-            <div class="conversation-list" id="conversationList"></div>
+          <div class="wechat-content" id="wechatContent">
+            <section class="app-screen active" data-screen="chats">
+              <div class="desktop-login" id="desktopLogin"><span class="desktop-icon"></span><span>已登录 Windows 电脑</span></div>
+              <div class="conversation-list" id="conversationList"></div>
+            </section>
+
+            <section class="app-screen contacts-screen" data-screen="contacts">
+              <div class="contact-list special-contacts">
+                <div class="contact-row"><span class="contact-icon orange">♙+</span><b>新的朋友</b></div>
+                <div class="contact-row"><span class="contact-icon orange">♙</span><b>仅聊天的朋友</b></div>
+                <div class="contact-row"><span class="contact-icon green">♙</span><b>群聊</b></div>
+                <div class="contact-row"><span class="contact-icon blue">◆</span><b>标签</b></div>
+                <div class="contact-row"><span class="contact-icon blue">◫</span><b>公众号</b></div>
+                <div class="contact-row"><span class="contact-icon cyan">◆</span><b>服务号</b></div>
+              </div>
+              <div class="contact-section-title">我的企业及企业联系人</div>
+              <div class="contact-list"><div class="contact-row"><span class="contact-icon blue">◌</span><b>企业微信联系人</b></div><div class="contact-row"><span class="contact-icon cyan">⌂</span><b>示例大学</b></div></div>
+              <div class="contact-section-title">星标朋友</div>
+              <div class="contact-list"><div class="contact-row"><span class="contact-avatar default-avatar">林</span><b>林然</b></div></div>
+              <div class="alphabet-rail">↑<br>☆<br>A<br>B<br>C<br>D<br>E<br>F<br>G<br>H<br>I<br>J<br>K<br>L<br>M<br>N<br>O<br>P<br>Q<br>R<br>S<br>T<br>U<br>V<br>W<br>X<br>Y<br>Z<br>#</div>
+            </section>
+
+            <section class="app-screen discover-screen" data-screen="discover">
+              <div class="settings-group"><div class="setting-row"><span class="line-icon moments">◉</span><b>朋友圈</b><span class="moment-thumb"></span><i>›</i></div></div>
+              <div class="settings-group"><div class="setting-row"><span class="line-icon look">✧</span><b>看一看</b><i>›</i></div></div>
+            </section>
+
+            <section class="app-screen me-screen" data-screen="me">
+              <div class="profile-card"><span class="profile-avatar default-avatar">林</span><div class="profile-copy"><strong>林然</strong><span>微信号：wxid_demo</span><div><em>＋ 状态</em><em>2个朋友 <i></i></em></div></div><span class="qr-mark">▦</span><i class="profile-arrow">›</i></div>
+              <div class="settings-group"><div class="setting-row"><span class="line-icon service">◉</span><b>服务</b><i>›</i></div></div>
+              <div class="settings-group"><div class="setting-row"><span class="line-icon collection">◇</span><b>收藏</b><i>›</i></div><div class="setting-row"><span class="line-icon album">▧</span><b>朋友圈</b><i>›</i></div><div class="setting-row"><span class="line-icon works">▣</span><b>作品</b><i>›</i></div><div class="setting-row"><span class="line-icon cards">⌑</span><b>小店与卡包</b><small>示例消息… <u></u></small><i>›</i></div><div class="setting-row"><span class="line-icon emoji">☺</span><b>表情</b><i>›</i></div></div>
+              <div class="settings-group"><div class="setting-row"><span class="line-icon settings">⚙</span><b>设置</b><i>›</i></div></div>
+            </section>
           </div>
 
-          <nav class="tab-bar">
-            <button class="tab active" type="button"><span class="tab-icon chat-icon"></span><span>微信</span><em id="totalUnread"></em></button>
-            <button class="tab" type="button"><span class="tab-icon contacts-icon"></span><span>通讯录</span></button>
-            <button class="tab" type="button"><span class="tab-icon discover-icon"></span><span>发现</span></button>
-            <button class="tab" type="button"><span class="tab-icon me-icon"></span><span>我</span></button>
+          <nav class="tab-bar" id="tabBar">
+            <button class="tab active" data-tab="chats" type="button"><span class="tab-icon chat-icon"></span><span>微信</span><em id="totalUnread"></em></button>
+            <button class="tab" data-tab="contacts" type="button"><span class="tab-icon contacts-icon"></span><span>通讯录</span></button>
+            <button class="tab" data-tab="discover" type="button"><span class="tab-icon discover-icon"></span><span>发现</span></button>
+            <button class="tab" data-tab="me" type="button"><span class="tab-icon me-icon"></span><span>我</span></button>
           </nav>
           <div class="home-indicator"></div>
         </div>
