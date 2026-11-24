@@ -2,6 +2,11 @@
 <html>
 <head>
 	<meta charset="UTF-8">
+	<script>
+		if (!new URLSearchParams(location.search).has('legacy')) {
+			location.replace('pages/chats.html');
+		}
+	</script>
 	<title>微信对话生成器二改版 - 支持语音通话与视频通话截图生成</title>
 	<meta name="keywords" content="微信对话生成器,微信聊天记录生成,语音通话截图,视频通话截图" />
 	<meta name="description" content="微信对话生成器二改版，支持文字、图片、语音、红包、转账、语音通话、视频通话聊天记录截图生成。" />
@@ -26,6 +31,7 @@
 		<div class="container-fluid page-content">
 			<div id="pageHeader">微信对话生成器</div>
 			<div class="page-actions">
+				<a href="pages/chats.html" class="btn btn-success" style="margin-right: 8px;">返回微信模拟器</a>
 				<button @click="save" class="btn btn-warning btn-save-image">生成并保存图片</button>
 				<span class="page-actions-tip">生成后会弹出图片预览，长按或右键即可保存到本地</span>
 			</div>
@@ -619,6 +625,7 @@
 	</div>
 	<a id="lightBoxToggle" href="javascript:;" data-toggle="lightbox" data-type="image" style="display:none;">preview</a>
 	<script type="text/javascript" src="static/app/js/call-extension.js"></script>
+	<script type="text/javascript" src="static/app/js/chat-bridge.js"></script>
 </body>
 
 </html>

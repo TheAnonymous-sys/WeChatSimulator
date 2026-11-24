@@ -5,12 +5,15 @@
 上游仓库：https://github.com/zixiwangluo/wxdh
 
 当前仓库地址：  
-https://github.com/JX-Lab/WeChatSimulator
+https://github.com/TheAnonymous-sys/WeChatSimulator
 
 这是一个纯静态网页项目，核心入口是根目录 [index.html]，可以直接部署到 GitHub Pages、静态服务器或虚拟主机。
 
 ## 本仓库二改内容
 - 保留原有文字、图片、语音、红包、转账等聊天记录生成能力
+- 新增微信会话列表模拟器，可编辑头像、昵称、消息摘要、时间、未读数、置顶和免打扰状态
+- 会话列表支持实时预览、本地自动保存和 PNG 图片导出
+- 点击会话可进入原有聊天页面，便于连续制作代餐场景
 - 新增更接近微信聊天截图的 `语音通话` / `视频通话` 记录条块
 - 支持设置通话状态：`已接通`、`未接通`、`已取消`
 - 支持设置通话时长，并自动规范为 `mm:ss` 格式
@@ -27,7 +30,7 @@ https://github.com/JX-Lab/WeChatSimulator
 5. 目录选择 `/ (root)`
 
 启用后，这个仓库通常会生成类似下面的地址：  
-https://jx-lab.github.io/WeChatSimulator/
+https://theanonymous-sys.github.io/WeChatSimulator/
 
 原版演示地址：  
 https://zixiwangluo.github.io/wxdh/
